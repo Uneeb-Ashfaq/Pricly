@@ -1,4 +1,44 @@
-body{
+
+
+
+
+/* Reset margins & paddings for all elements */
+* {
     margin: 0;
-    font-family: sans-serif;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+    
+
+
+.banner {
+    text-align: left;
+    padding: 20px;
+    background-color: rgb(30, 212, 218);
+    }
+
+.hero-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.body-section {
+    background-color: rgb(166, 211, 166);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #000000;
+
+}
+.track-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
 }

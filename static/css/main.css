@@ -14,27 +14,64 @@ html {
 }
 
 
-    
-
-
-.banner {
-    text-align: left;
-    padding: 20px;
-    background-color: rgb(30, 212, 218);
-    }
-
-.hero-section {
-    text-align: center;
-    padding: 20px;
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: rgb(240, 240, 240);
 }
 
+
+header {
+    position: fixed;
+    top : 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    }
+header h1 {
+    font-size: 24px;
+    color: #333333;
+    margin-left: 60px;
+}
+.hero-section {
+    padding: 20;
+    background: rgb(166, 211, 166);
+    border-radius: 8px;
+    border: 1px solid #000000;
+
+}
+
+.hero-section h2 {
+    margin-left: 60px;
+    margin-top: 100px;
+    margin-bottom: 15px;
+    font-size: 36px;
+
+}
+
+.hero-section p {
+    margin-left: 60px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333333;
+}
 .body-section {
+    margin-top: 100px;
     background-color: rgb(166, 211, 166);
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
+    margin-right: 20px;
+    margin-left: 20px;
     border: 1px solid #000000;
+}
 
+.body-section h3{
+    text-align: center;
 }
 .track-form {
     display: flex;

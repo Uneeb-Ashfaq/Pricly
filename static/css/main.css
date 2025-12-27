@@ -16,7 +16,6 @@ body {
     background-color: rgb(240, 240, 240);
 }
 main {
-    max-width: 100%;
     margin: 0 auto;
     padding-top: 80px;
 
@@ -34,7 +33,6 @@ header {
     z-index: 1000;
     }
 header h1 {
-    margin-left: 100px;
     font-size: 24px;
     color: #333333;
 }
@@ -42,7 +40,7 @@ header h1 {
 .hero-section {
     margin-top: -20px;
     padding: 40px 50px;        
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    background: linear-gradient(90deg, #ffffff, #ffffff);
     border-radius: 8px;
     border: 1px solid #000000;
     display: flex;                
@@ -54,22 +52,25 @@ header h1 {
 
 
 .hero-image img {
-    width: 750px;                 /* adjust if you want bigger/smaller */
+    width: 750px;           
     max-width: 100%;
     height: auto;
-    display: block;
+    display: inline-block;
 }
 
 
 
 
 .hero-section h2 {
+    margin-left: 100px;
     margin-bottom: 15px;
-    font-size: 4rem;
-    width: 750px;
+    font-size: 3rem;
+    max-width: 100%; 
+    width: 600px;
 }
 
 .hero-section p {
+    margin-left: 100px;
     margin-bottom: 10px;
     font-size: 1rem;
     color: #333333;
@@ -101,6 +102,8 @@ button {
     width: 50%;
     margin: 0 auto;
 }
+
+
 
 .track-form {
     display: flex;

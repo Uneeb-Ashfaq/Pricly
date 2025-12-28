@@ -76,13 +76,12 @@
         <h2>{{ product.name }}</h2>
         <p>Current Price: ${{ product.current_price }}</p>
         <p>Target Price: ${{ product.target_price }}</p>
-
-        <a href="/delete/{{ product.id }}">Remove Product</a>
+        <button class="remove-btn">Remove Product</div>button>
+        <a href="/delete/{{ product.id }}">Delete</a>
       </div>
-    </div>
-  </div>
-  {% endfor %}
 
+  {% endfor %}
+  </div>
   </section>
 
 

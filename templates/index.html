@@ -65,23 +65,26 @@
   <!-- Tracked Products -->
   <section class="tracked-products-section" id="products">
     <h1>Tracked Products</h1>
-{% for product in products %}
+    {% if products %}
+      <div class="box-container">
+        {% for product in products %}
+        <div class="box">
+          <div class="image">
+            <img src="/static/images/sample_product.png" alt="Sample Product">
+          </div>
 
-      <div class="box">
-        <div class="image">
-          <img src="/static/images/sample_product.png" alt="Sample Product">
+        <div class="details">
+          <h2>{{ product.name }}</h2>
+          <p>Current Price: ${{ product.current_price }}</p>
+          <p>Target Price: ${{ product.target_price }}</p>
+          <a href="/delete/{{ product.id }}">Remove Product</a>
         </div>
+    </div>
 
-      <div class="details">
-        <h2>{{ product.name }}</h2>
-        <p>Current Price: ${{ product.current_price }}</p>
-        <p>Target Price: ${{ product.target_price }}</p>
-        <button class="remove-btn">Remove Product</div>button>
-        <a href="/delete/{{ product.id }}">Delete</a>
-      </div>
-
-  {% endfor %}
-  </div>
+    {% endfor %}
+  {% else %}
+    <p>No products tracked yet. Add one above to get started!</p>
+  {% endif %}
   </section>
 
 

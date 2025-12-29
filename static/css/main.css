@@ -21,6 +21,14 @@ main {
 
 }
 
+/* General styles for all <a> links */
+a {
+    color: var(--text-color);
+    text-decoration: none; /* Removes underline from links */
+    margin-right: 10px;
+
+}   
+    
 
 header {
     position: fixed;
@@ -101,6 +109,16 @@ button {
     cursor: pointer;
     width: 50%;
     margin: 0 auto;
+}
+.delete-button {
+    padding: px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 70%;
+    margin-top: 10px;
 }
 
 

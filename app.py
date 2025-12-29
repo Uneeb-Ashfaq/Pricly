@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect  
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from bs4 import BeautifulSoup
+import requests
+
 
 
 app = Flask(__name__)
@@ -51,6 +54,10 @@ def delete(id):
     except:
         return "There was a problem deleting that product"
 
+def scrape_Amazon(url):
+    soup = BeautifulSoup(requests.get(url).content, 'html.parser')
+    title = soup.find(id='productTitle').get_text().strip()
+    price = soup.find(id='priceblock_ourprice').get_text().strip()
 
 if __name__ == "__main__":
     with app.app_context():

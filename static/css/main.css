@@ -165,3 +165,9 @@ button {
     align-items: center;
     text-align: center;
 }
+
+.product-image{
+  width: 50%;
+  max-width: 250px;
+  height: auto;
+}

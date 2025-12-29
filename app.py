@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 class Product(db.Model):  #database model
     id = db.Column(db.Integer, primary_key=True) 
     url = db.Column(db.String(500), nullable=False) 
+    image_url = db.Column(db.String(500))
     name = db.Column(db.String(100)) 
     current_price = db.Column(db.Float) 
     target_price = db.Column(db.Float)  
@@ -36,11 +37,12 @@ def index():
             return "Please enter both a URL and a target price."
 
         try: #scraping the product details
-            name, current_price = scrape(product_url)
+            name, current_price, image_url= scrape(product_url)
             current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', ''))
         except Exception as e: #handling scraping errors
             return f"There was an issue scraping the product: {str(e)}"
         new_product = Product( #adding product to database
+            image_url=image_url, 
             url=product_url,
             name=name,
             current_price=current_price,
@@ -94,8 +96,9 @@ def scrape(url): #scraping function
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     price_element = soup.find("span", itemprop="price")
     current_price = price_element.get_text().strip() if price_element else "0.00"
-    return name, current_price
-
+    image_element = soup.find("img", {"loading": "eager"})
+    image_url = image_element.get('src') if image_element else None
+    return name, current_price, image_url
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()

@@ -75,7 +75,7 @@ def delete(id):
 def scrape(url): #scraping function
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
         'Accept-Encoding': 'gzip, deflate, br',
         'DNT': '1',
@@ -84,20 +84,41 @@ def scrape(url): #scraping function
         'Sec-Fetch-Dest': 'document',
         'Sec-Fetch-Mode': 'navigate',
         'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
         'Cache-Control': 'max-age=0',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
     }
 
-    time.sleep(2)  # Wait 2 seconds before making request
-    response = requests.get(url, headers=headers, timeout=10)
+    time.sleep(60)  # Wait 2 seconds before making request
+    session = requests.Session()
+
+    response = session.get(url, headers=headers, timeout=30)
     response.raise_for_status()  # Raise error for bad status codes
     soup = BeautifulSoup(response.text, 'html.parser')
     print(response.text[:2000])
-    name_element = soup.find("h1", itemprop="name")
-    name = name_element.get_text().strip() if name_element else "Unknown Product"
-    price_element = soup.find("span", itemprop="price")
-    current_price = price_element.get_text().strip() if price_element else "0.00"
-    image_element = soup.find("img", {"loading": "eager"})
-    image_url = image_element.get('src') if image_element else None
+    if "walmart.com" in url or "walmart.ca" in url:
+        name_element = soup.find("h1", itemprop="name")
+        name = name_element.get_text().strip() if name_element else "Unknown Product"
+        price_element = soup.find("span", itemprop="price")
+        current_price = price_element.get_text().strip() if price_element else "0.00"
+        image_element = soup.find("img", {"loading": "eager"})
+        image_url = image_element.get('src') if image_element else None
+    elif "amazon.com" in url or "amazon.ca" in url:
+        name_element = soup.find("h1", id="productTitle")
+        name = name_element.get_text().strip() if name_element else "Unknown Product"
+        price_element = soup.find("span", class_="a-price-whole") 
+        current_price = price_element.get_text().strip() if price_element else "0.00"
+        image_element = soup.find(id="landingImage")
+        image_url = image_element.get('src') if image_element else None
+    elif "etsy.com" in url or "etsy.ca" in url:
+        name_element = soup.find("h1", class_="wt-line-height-tight wt-break-word wt-text-body")
+        name = name_element.get_text().strip() if name_element else "Unknown Product"
+        price_element = soup.find("p", class_="wt-text-title-larger wt-mr-xs-1 wt-text-black")
+        current_price = price_element.get_text().strip() if price_element else "0.00"
+        image_element = soup.find("img", class_="wt-max-width-full wt-horizontal-center wt-vertical-center carousel-image wt-rounded")
+        image_url = image_element.get('src') if image_element else None
     return name, current_price, image_url
 if __name__ == "__main__":
     with app.app_context():

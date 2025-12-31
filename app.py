@@ -38,7 +38,7 @@ def index():
 
         try: #scraping the product details
             name, current_price, image_url= scrape(product_url)
-            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', ''))
+            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('CA', '').strip().replace('US','')) 
         except Exception as e: #handling scraping errors
             return f"There was an issue scraping the product: {str(e)}"
         new_product = Product( #adding product to database
@@ -91,37 +91,70 @@ def scrape(url): #scraping function
         'sec-ch-ua-platform': '"Windows"',
     }
 
-    time.sleep(60)  # Wait 2 seconds before making request
+    time.sleep(2)  # Wait 1 second before making request
     session = requests.Session()
 
-    response = session.get(url, headers=headers, timeout=30)
+    response = session.get(url, headers=headers, timeout=60)
     response.raise_for_status()  # Raise error for bad status codes
     soup = BeautifulSoup(response.text, 'html.parser')
-    print(response.text[:2000])
-    if "walmart.com" in url or "walmart.ca" in url:
+    if "walmart.com" in url or "walmart.ca" in url: # Works!
         name_element = soup.find("h1", itemprop="name")
-        name = name_element.get_text().strip() if name_element else "Unknown Product"
         price_element = soup.find("span", itemprop="price")
-        current_price = price_element.get_text().strip() if price_element else "0.00"
         image_element = soup.find("img", {"loading": "eager"})
-        image_url = image_element.get('src') if image_element else None
-    elif "amazon.com" in url or "amazon.ca" in url:
-        name_element = soup.find("h1", id="productTitle")
-        name = name_element.get_text().strip() if name_element else "Unknown Product"
-        price_element = soup.find("span", class_="a-price-whole") 
-        current_price = price_element.get_text().strip() if price_element else "0.00"
-        image_element = soup.find(id="landingImage")
-        image_url = image_element.get('src') if image_element else None
-    elif "etsy.com" in url or "etsy.ca" in url:
-        name_element = soup.find("h1", class_="wt-line-height-tight wt-break-word wt-text-body")
-        name = name_element.get_text().strip() if name_element else "Unknown Product"
-        price_element = soup.find("p", class_="wt-text-title-larger wt-mr-xs-1 wt-text-black")
-        current_price = price_element.get_text().strip() if price_element else "0.00"
-        image_element = soup.find("img", class_="wt-max-width-full wt-horizontal-center wt-vertical-center carousel-image wt-rounded")
-        image_url = image_element.get('src') if image_element else None
+    elif "target.com" in url or "target.ca" in url:  #Only Price not working atm
+        name_element = soup.find("h1",id="pdp-product-title-id")
+        price_element = soup.find("div", {"data-test": "product-price"})
+        image_element = soup.find("img")
+    elif "newegg.com" in url or "newegg.ca" in url: #Works!
+        name_element = soup.find("h1",class_="product-title")
+        price_element = soup.find("div", class_="price-current").find("strong")
+        image_element = soup.find("img", class_="product-view-img-original")
+
+    elif "ebay.com" in url or "ebay.ca" in url: #Works!
+        name_element = soup.find("h1", class_="x-item-title__mainTitle")
+        price_element = soup.find("div", class_="x-price-primary")
+        image_element = soup.find("img")
+    elif "costco.com" in url or "costco.ca" in url: # Does not Work 
+        name_element = soup.find("h1", class_="product-title")
+        price_element = soup.find("span", class_="value")
+        image_element = soup.find("img", id="heroImage_zoom")
+           
+
+    name = name_element.get_text().strip() if name_element else "Unknown Product"
+    current_price = price_element.get_text().strip() if price_element else "0.00"
+    image_url = image_element.get('src') if image_element else None
     return name, current_price, image_url
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
 
+
+
+'''
+
+ #elif "amazon.com" in url or "amazon.ca" in url: #does not work at the momennt
+        #name_element = soup.find("h1", id="title")
+        #price_element = soup.find("span", class_="a-price-whole") 
+        #image_element = soup.find(id="landingImage")
+    #elif "etsy.com" in url or "etsy.ca" in url: #does not work at the momennt
+        #name_element = soup.find("h1", class_="wt-line-height-tight wt-break-word wt-text-body")
+        #price_element = soup.find("p", class_="wt-text-title-larger wt-mr-xs-1 wt-text-black")
+        #image_element = soup.find("img", class_="wt-max-width-full wt-horizontal-center wt-vertical-center carousel-image wt-rounded")
+    #elif "sephora.com" in url or "sephora.ca" in url: #does not work at the momennt
+        #name_element = soup.find("h1")
+        #price_element = soup.find("b")
+        #image_element = soup.find("img")
+    #elif "bestbuy.com" in url:
+        #name_element = soup.find("h1", class_="h4")
+        #price_element = soup.find("span", class_="text-default")
+        #image_element = soup.find("img", class_="object-contain")
+   # elif "lowes.com" in url or "lowes.ca" in url: #Does Not Work!
+       # name_element = soup.find("h1",class_="product-brand-description")
+       # price_element = soup.find("div").find("Price")
+       # image_element = soup.find("img", class_="tile-img")
+#    elif "wayfair.com" in url or "wayfair.ca" in url: #Does Not Work!
+       # name_element = soup.find("h1") 
+       # price_element = soup.find("span", class_="_6o3atzbl _6o3atzc7 _6o3atz1d9 _6o3atz1bd")
+       # image_element = soup.find("img")
+ '''

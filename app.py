@@ -21,6 +21,7 @@ class Product(db.Model):  #database model
     current_price = db.Column(db.Float) 
     target_price = db.Column(db.Float)  
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    message_sent = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
             return f'<Product {self.url}>' 
@@ -103,7 +104,7 @@ def scrape(url): #scraping function
         image_element = soup.find("img", {"loading": "eager"})
     elif "target.com" in url or "target.ca" in url:  #Only Price not working atm
         name_element = soup.find("h1",id="pdp-product-title-id")
-        price_element = soup.find("div", {"data-test": "product-price"})
+        price_element = soup.find("span", {"data-test": "product-price"})
         image_element = soup.find("img")
     elif "newegg.com" in url or "newegg.ca" in url: #Works!
         name_element = soup.find("h1",class_="product-title")

@@ -1,6 +1,17 @@
 from twilio.rest import Client
 import alerts.keys as keys
-from app import app, db, Product
+from app import app, db, Product, scrape
+
+def check_prices():
+    with app.app_context():
+        try:
+            for product in Product.query.all():
+                name, price, image_url = scrape(product.url)
+                price = float(price.replace('$', '').replace('Now ', '').replace(',', '').replace('CA', '').strip().replace('US','')) 
+                product.current_price = price
+            db.session.commit()
+        except Exception as e:
+            print(f"Error checking prices: {str(e)}")
 
 client = Client(keys.ACCOUNT_SID, keys.AUTH_TOKEN)
 def send_price_alerts():

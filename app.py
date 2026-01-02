@@ -4,8 +4,6 @@ import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
-from run_alerts import send_price_alerts
-from run_alerts import check_prices
 
 
 
@@ -139,8 +137,7 @@ def scrape(url): #scraping function
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        check_prices()
-        send_price_alerts()
+
     app.run(debug=True)
 
 

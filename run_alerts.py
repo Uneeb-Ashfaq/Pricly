@@ -33,3 +33,8 @@ def send_price_alerts():
                     print(f"Message sent with SID: {message.sid}")
                 except Exception as e:
                     print(f"Error sending message: {e}")
+
+if __name__ == "__main__":
+    check_prices()
+    send_price_alerts()
+    print('Price check and alerts complete.')

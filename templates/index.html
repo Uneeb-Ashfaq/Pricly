@@ -82,13 +82,13 @@
           <h2><a href="{{ product.url }}" target="_blank">{{ product.name }}</a></h2>
           <p>Current Price: ${{ product.current_price }}</p>
           <p>Target Price: ${{ product.target_price }}</p>
-          <button class="delete-button"><a href="/delete/{{ product.id }}">Remove Product</a></button>
+          <a href="/delete/{{ product.id }}" class="delete-button">Remove Product</a>
         </div>
     </div>
 
     {% endfor %}
   {% else %}
-    <p>No products tracked yet. Add one above to get started!</p>
+    <p class="no-products">No products tracked yet. Add one above to get started!</p> 
   {% endif %}
   </section>
 

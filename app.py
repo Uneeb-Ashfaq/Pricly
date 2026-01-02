@@ -131,9 +131,21 @@ def scrape(url): #scraping function
     current_price = price_element.get_text().strip() if price_element else "0.00"
     image_url = image_element.get('src') if image_element else None
     return name, current_price, image_url
+def check_prices():
+    with app.app_context():
+        try:
+            for product in Product.query.all():
+                name, price, image_url = scrape(product.url)
+                product.current_price = price
+            db.session.commit()
+        except Exception as e:
+            print(f"Error checking prices: {str(e)}")
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        check_prices()
     app.run(debug=True)
 
 

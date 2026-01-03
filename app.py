@@ -93,10 +93,10 @@ def scrape(url): #scraping function
         'sec-ch-ua-platform': '"Windows"',
     }
 
-    time.sleep(2)  # Wait 1 second before making request
+    time.sleep(1)  # Wait 1 second before making request
     session = requests.Session()
 
-    response = session.get(url, headers=headers, timeout=10)
+    response = session.get(url, headers=headers, timeout=15)
     response.raise_for_status()  # Raise error for bad status codes
     soup = BeautifulSoup(response.text, 'html.parser')
     if "walmart.com" in url or "walmart.ca" in url: # Works!
@@ -123,6 +123,12 @@ def scrape(url): #scraping function
         name_element = soup.find("h1",id="productTitle-false")
         price_element = soup.find(attrs={"data-automation-id": "at-price-value"})
         image_element = soup.find("img")
+    elif "apple.com" in url or "apple.ca" in url: # Works!
+        name_element = soup.find("h1")
+        price_element = soup.find("span", class_="rc-prices-fullprice")
+        image_element = soup.find("img", class_="rf-configuration-hero-image")
+        print(response.text[:2500])  # Debugging line to check HTML content
+        
 
     else:
         raise Exception("Website not supported for scraping.")

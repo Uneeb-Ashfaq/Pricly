@@ -78,7 +78,7 @@
 
         <div class="details">
           
-          <h2><a href="{{ product.url }}" target="_blank">{{ product.name }}</a></h2>
+          <h2><a href="{{ product.url }}" target="_blank" class="product_url">{{ product.name }}</a></h2>
           <p>Current Price: ${{ product.current_price }}</p>
           <p>Target Price: ${{ product.target_price }}</p>
           <a href="/delete/{{ product.id }}" class="delete-button">Remove Product</a>

@@ -178,3 +178,22 @@ button {
   max-width: 250px;
   height: auto;
 }
+
+.delete-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.03);
+    transition: transform 0.3s, color 0.3s;
+
+
+}
+.product_url:hover {
+    color: #088179;
+    transition: transform 0.3s, color 0.3s;
+
+}
+button:hover {
+    background-color: #066666;
+    transform: scale(1.015);
+    transition: transform 0.4s, color 0.4s;
+
+}

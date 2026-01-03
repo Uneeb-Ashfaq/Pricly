@@ -20,7 +20,7 @@ class Product(db.Model):  #database model
     image_url = db.Column(db.String(500))
     name = db.Column(db.String(100)) 
     current_price = db.Column(db.Float) 
-    target_price = db.Column(db.Float)  
+    target_price = db.Column(db.Float, nullable=False)  
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     message_sent = db.Column(db.Boolean, default=False)
 
@@ -33,10 +33,8 @@ class Product(db.Model):  #database model
 def index():
     if request.method == 'POST': 
         product_url = request.form.get('product_url')  #getting url from form
-        target_price = float(request.form.get('target_price')) #getting target price from form
-        
-        if not product_url or not target_price: #validation
-            return "Please enter both a URL and a target price."
+        target_price_input = request.form.get('target_price')
+        target_price = float(target_price_input)
 
         try: #scraping the product details
             name, current_price, image_url= scrape(product_url)

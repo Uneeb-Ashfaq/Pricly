@@ -128,8 +128,7 @@ def scrape(url): #scraping function
     elif "berluti.com" in url:  # Works (Picture doesnt work)!
         name_element = soup.find("h1")
         price_element = soup.find("div", class_="prices")
-        image_element = soup.select_one("img.pdp-image ph-45")
-
+        image_element = soup.find("img", class_="pdp-image ph-45")
 
     else:
         raise Exception("Website not supported for scraping.")
@@ -137,7 +136,7 @@ def scrape(url): #scraping function
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
-    image_url = image_element.get('src') if image_element else None
+    image_url = image_element.get('data-src') or image_element.get('src')  if image_element else None
     return name, current_price, image_url
 
 

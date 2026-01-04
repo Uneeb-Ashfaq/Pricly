@@ -94,7 +94,7 @@ def scrape(url): #scraping function
     time.sleep(1)  # Wait 1 second before making request
     session = requests.Session()
 
-    response = session.get(url, headers=headers, timeout=15)
+    response = session.get(url, headers=headers, timeout=7)
     response.raise_for_status()  # Raise error for bad status codes
     soup = BeautifulSoup(response.text, 'html.parser')
     if "walmart.com" in url or "walmart.ca" in url: # Works!
@@ -125,7 +125,12 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("span", attrs={"data-test-id": "item-price-pdp"})
         image_element = soup.find("img")
- 
+    elif "berluti.com" in url:
+        name_element = soup.find("h1")
+        price_element = soup.find("div", class_="prices")
+        image_element = soup.find("picture",class_="picture").find("img")
+
+
     else:
         raise Exception("Website not supported for scraping.")
     #print(response.text[:2500])  # Debugging line to check HTML content       

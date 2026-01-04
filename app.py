@@ -123,12 +123,12 @@ def scrape(url): #scraping function
         image_element = soup.find("img", class_="rf-configuration-hero-image") 
     elif "puma.com" in url or "puma.ca" in url: 
         name_element = soup.find("h1")
-        price_element = soup.find("span", attrs={"data-test-id": "item-price-pdp"})
+        price_element = soup.find("span", attrs={"data-test-id": "item-sale-price-pdp"}) or soup.find("span", attrs={"data-test-id": "item-price-pdp"})
         image_element = soup.find("img")
-    elif "berluti.com" in url:
+    elif "berluti.com" in url:  # Works (Picture doesnt work)!
         name_element = soup.find("h1")
         price_element = soup.find("div", class_="prices")
-        image_element = soup.find("picture",class_="picture").find("img")
+        image_element = soup.select_one("img.pdp-image ph-45")
 
 
     else:

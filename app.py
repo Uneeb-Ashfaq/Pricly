@@ -91,7 +91,7 @@ def scrape(url): #scraping function
         'sec-ch-ua-platform': '"Windows"',
     }
 
-    time.sleep(1)  # Wait 1 second before making request
+    time.sleep(10)  # Wait 1 second before making request
     session = requests.Session()
 
     response = session.get(url, headers=headers, timeout=7)
@@ -125,11 +125,14 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("span", attrs={"data-test-id": "item-sale-price-pdp"}) or soup.find("span", attrs={"data-test-id": "item-price-pdp"})
         image_element = soup.find("img")
-    elif "berluti.com" in url:  # Works (Picture doesnt work)!
+    elif "berluti.com" in url:  # Works!
         name_element = soup.find("h1")
         price_element = soup.find("div", class_="prices")
         image_element = soup.find("img", class_="pdp-image ph-45")
-
+    elif "ae.com" in url or "ae.ca" in url:  # Works!
+        name_element = soup.find("h1")
+        price_element = soup.find("span")
+        image_element = soup.find("img", attrs={"data-testid": "sale-price"}) or soup.find("span", attrs={"data-testid": "list-price"})
     else:
         raise Exception("Website not supported for scraping.")
     #print(response.text[:2500])  # Debugging line to check HTML content       

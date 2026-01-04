@@ -38,7 +38,7 @@ def index():
 
         try: #scraping the product details
             name, current_price, image_url= scrape(product_url)
-            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('CA', '').strip().replace('US','')) 
+            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').strip()) 
         except Exception as e: #handling scraping errors
             return f"There was an issue scraping the product: {str(e)}"
         new_product = Product( #adding product to database
@@ -101,10 +101,6 @@ def scrape(url): #scraping function
         name_element = soup.find("h1", itemprop="name")
         price_element = soup.find("span", itemprop="price")
         image_element = soup.find("img", {"loading": "eager"})
-    elif "target.com" in url or "target.ca" in url:  #Only Price not working atm
-        name_element = soup.find("h1",id="pdp-product-title-id")
-        price_element = soup.find("span", {"data-test": "product-price"})
-        image_element = soup.find("img")
     elif "newegg.com" in url or "newegg.ca" in url: #Works!
         name_element = soup.find("h1",class_="product-title")
         price_element = soup.find("div", class_="price-current").find("strong")
@@ -121,16 +117,18 @@ def scrape(url): #scraping function
         name_element = soup.find("h1",id="productTitle-false")
         price_element = soup.find(attrs={"data-automation-id": "at-price-value"})
         image_element = soup.find("img")
-    elif "apple.com" in url or "apple.ca" in url: # Works!
+    elif "apple.com" in url or "apple.ca" in url: # Works (Picture doesnt work)!
         name_element = soup.find("h1")
         price_element = soup.find("span", class_="rc-prices-fullprice")
-        image_element = soup.find("img", class_="rf-configuration-hero-image")
-        print(response.text[:2500])  # Debugging line to check HTML content
-        
-
+        image_element = soup.find("img", class_="rf-configuration-hero-image") 
+    elif "puma.com" in url or "puma.ca" in url: 
+        name_element = soup.find("h1")
+        price_element = soup.find("span", attrs={"data-test-id": "item-price-pdp"})
+        image_element = soup.find("img")
+ 
     else:
         raise Exception("Website not supported for scraping.")
-           
+    #print(response.text[:2500])  # Debugging line to check HTML content       
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
@@ -168,17 +166,17 @@ if __name__ == "__main__":
        # name_element = soup.find("h1",class_="product-brand-description")
        # price_element = soup.find("div").find("Price")
        # image_element = soup.find("img", class_="tile-img")
-#    elif "wayfair.com" in url or "wayfair.ca" in url: #Does Not Work!
-       # name_element = soup.find("h1") 
-       # price_element = soup.find("span", class_="_6o3atzbl _6o3atzc7 _6o3atz1d9 _6o3atz1bd")
-       # image_element = soup.find("img")
+#    
  elif "costco.com" in url or "costco.ca" in url: # Does not Work 
         name_element = soup.find("h1", class_="product-title")
         price_element = soup.find("span", class_="value")
         image_element = soup.find("img", id="heroImage_zoom")
 
 
-
+    elif "target.com" in url or "target.ca" in url:  #Only Price not working atm
+        name_element = soup.find("h1",id="pdp-product-title-id")
+        price_element = soup.find("div", class_="styles_currentPriceFontSize__Xps20")
+        image_element = soup.find("img")
 
     
     elif "lenovo.com" in url or "lenovo.ca" in url:

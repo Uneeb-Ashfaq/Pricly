@@ -58,6 +58,7 @@ header h1 {
 
 
 
+
 .hero-image img {
     width: 750px;           
     max-width: 100%;
@@ -82,6 +83,30 @@ header h1 {
     font-size: 1rem;
     color: #333333;
 }
+
+
+    
+.website-list {
+    margin-top: 20px;
+    padding: 40px 50px;        
+    background-color: rgb(255, 255, 255);
+    display: flex;                
+    align-items: center;     
+.website-logos-container {
+       display: flex;                
+
+
+}
+}
+.website-list .website-logos-container img {
+    width: 100px;           
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+
 .body-section {
     margin-top: 50px;
     background-color: rgb(255, 255, 255);
@@ -197,3 +222,4 @@ button:hover {
     transition: transform 0.4s, color 0.4s;
 
 }
+

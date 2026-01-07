@@ -7,8 +7,9 @@ def check_prices():
         try:
             for product in Product.query.all():
                 name, price, image_url = scrape(product.url)
-                price = float(price.replace('$', '').replace('Now ', '').replace(',', '').replace('CA', '').strip().replace('US','')) 
-                product.current_price = price
+                price = float(price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').replace('Sale price', '').strip()) 
+                product.current_price = price  # ✅ ADD THIS LINE!
+
             db.session.commit()
         except Exception as e:
             print(f"Error checking prices: {str(e)}")

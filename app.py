@@ -91,10 +91,10 @@ def scrape(url): #scraping function
         'sec-ch-ua-platform': '"Windows"',
     }
 
-    time.sleep(10)  # Wait 1 second before making request
+    time.sleep(2)  # Wait 1 second before making request
     session = requests.Session()
 
-    response = session.get(url, headers=headers, timeout=7)
+    response = session.get(url, headers=headers, timeout=5)
     response.raise_for_status()  # Raise error for bad status codes
     soup = BeautifulSoup(response.text, 'html.parser')
     if "walmart.com" in url or "walmart.ca" in url: # Works!
@@ -122,7 +122,7 @@ def scrape(url): #scraping function
         price_element = soup.find("span", class_="rc-prices-fullprice")
         image_element = soup.find("img", class_="rf-configuration-hero-image") 
 
-    elif "puma.com" in url or "puma.ca" in url: 
+    elif "puma.com" in url or "puma.ca" in url:  
         name_element = soup.find("h1")
         price_element = soup.find("span", attrs={"data-test-id": "item-sale-price-pdp"}) or soup.find("span", attrs={"data-test-id": "item-price-pdp"})
         image_element = soup.find("img")
@@ -130,18 +130,19 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("div", class_="prices")
         image_element = soup.find("img", class_="pdp-image ph-45")
-    elif "ae.com" in url or "ae.ca" in url:  # Works!
+    elif "ae.com" in url or "ae.ca" in url:  # price not working
         name_element = soup.find("h1")
-        price_element = soup.find("span")
-        image_element = soup.find("img", attrs={"data-testid": "sale-price"}) or soup.find("span", attrs={"data-testid": "list-price"})
-    elif  "forever21" in url:
+        price_element = soup.find("span",  attrs={"data-testid": "sale-price"}) or soup.find("span", attrs={"data-testid": "list-price"})
+        image_element = soup.find("img")
+    elif "forever21" in url:
         name_element = soup.find("h1")
         price_element = soup.find("sale-price")
         image_element = soup.find("img", {"loading": "eager"})
 
+  
+
 
     else:
-
         raise Exception("Website not supported for scraping.")
     #print(response.text[:2500])  # Debugging line to check HTML content       
 

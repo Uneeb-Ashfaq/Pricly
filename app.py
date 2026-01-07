@@ -38,7 +38,7 @@ def index():
 
         try: #scraping the product details
             name, current_price, image_url= scrape(product_url)
-            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').strip()) 
+            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').replace('Sale price', '').strip()) 
         except Exception as e: #handling scraping errors
             return f"There was an issue scraping the product: {str(e)}"
         new_product = Product( #adding product to database
@@ -121,6 +121,7 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("span", class_="rc-prices-fullprice")
         image_element = soup.find("img", class_="rf-configuration-hero-image") 
+
     elif "puma.com" in url or "puma.ca" in url: 
         name_element = soup.find("h1")
         price_element = soup.find("span", attrs={"data-test-id": "item-sale-price-pdp"}) or soup.find("span", attrs={"data-test-id": "item-price-pdp"})
@@ -133,7 +134,14 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("span")
         image_element = soup.find("img", attrs={"data-testid": "sale-price"}) or soup.find("span", attrs={"data-testid": "list-price"})
+    elif  "forever21" in url:
+        name_element = soup.find("h1")
+        price_element = soup.find("sale-price")
+        image_element = soup.find("img", {"loading": "eager"})
+
+
     else:
+
         raise Exception("Website not supported for scraping.")
     #print(response.text[:2500])  # Debugging line to check HTML content       
 

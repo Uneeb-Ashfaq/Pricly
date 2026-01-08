@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
+import re
 
 
 
@@ -26,6 +27,8 @@ class Product(db.Model):  #database model
 
     def __repr__(self):
             return f'<Product {self.url}>' 
+    
+
 
 
 # Homepage - shows products
@@ -38,7 +41,10 @@ def index():
 
         try: #scraping the product details
             name, current_price, image_url= scrape(product_url)
-            current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').replace('Sale price', '').strip()) 
+            current_price = float(re.search(r"\d+(?:\.\d+)?", current_price.replace(",", "")).group())
+
+            
+            #current_price = float(current_price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').replace('Sale price', '').strip()) 
         except Exception as e: #handling scraping errors
             return f"There was an issue scraping the product: {str(e)}"
         new_product = Product( #adding product to database
@@ -77,31 +83,20 @@ def scrape(url): #scraping function
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'DNT': '1',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
-        'Cache-Control': 'max-age=0',
-        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
+
+      
     }
 
     time.sleep(2)  # Wait 1 second before making request
     session = requests.Session()
-
-    response = session.get(url, headers=headers, timeout=5)
+    response = session.get(url, headers=headers, timeout=10)
     response.raise_for_status()  # Raise error for bad status codes
     soup = BeautifulSoup(response.text, 'html.parser')
     if "walmart.com" in url or "walmart.ca" in url: # Works!
         name_element = soup.find("h1", itemprop="name")
         price_element = soup.find("span", itemprop="price")
         image_element = soup.find("img", {"loading": "eager"})
-    elif "newegg.com" in url or "newegg.ca" in url: #Works!
+    elif "newegg.com" in url or "newegg.ca" in url: #Slight problem to check later
         name_element = soup.find("h1",class_="product-title")
         price_element = soup.find("div", class_="price-current").find("strong")
         image_element = soup.find("img", class_="product-view-img-original")
@@ -111,17 +106,16 @@ def scrape(url): #scraping function
         image_element = soup.find("img")
     elif "nike.com" in url or "nike.ca" in url: # WORKS!
         name_element = soup.find("h1", id="pdp_product_title")  
-        price_element = soup.find("div", id="price-container")
+        price_element = soup.find("span",attrs={"data-testid": "currentPrice-container"})
         image_element = soup.find("img")
     elif "jcpenney.com" in url or "jcpenney.ca" in url: #price not working yet
         name_element = soup.find("h1",id="productTitle-false")
         price_element = soup.find(attrs={"data-automation-id": "at-price-value"})
         image_element = soup.find("img")
-    elif "apple.com" in url or "apple.ca" in url: # Works (Picture doesnt work)!
+    elif "apple.com" in url or "apple.ca" in url: # error (Picture doesnt work)!
         name_element = soup.find("h1")
-        price_element = soup.find("span", class_="rc-prices-fullprice")
+        price_element = soup.find("span", class_="rc-price")
         image_element = soup.find("img", class_="rf-configuration-hero-image") 
-
     elif "puma.com" in url or "puma.ca" in url:  
         name_element = soup.find("h1")
         price_element = soup.find("span", attrs={"data-test-id": "item-sale-price-pdp"}) or soup.find("span", attrs={"data-test-id": "item-price-pdp"})
@@ -130,26 +124,29 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("div", class_="prices")
         image_element = soup.find("img", class_="pdp-image ph-45")
-    elif "ae.com" in url or "ae.ca" in url:  # price not working
+    elif "ae.com" in url or "ae.ca" in url: #works
         name_element = soup.find("h1")
-        price_element = soup.find("span",  attrs={"data-testid": "sale-price"}) or soup.find("span", attrs={"data-testid": "list-price"})
+        price_element = soup.find("div", attrs={"data-testid": "sale-price"}) or soup.find("div", attrs={"data-testid": "list-price"})
         image_element = soup.find("img")
-    elif "forever21" in url:
+    elif "forever21" in url: #works
         name_element = soup.find("h1")
         price_element = soup.find("sale-price")
         image_element = soup.find("img", {"loading": "eager"})
-
+    elif "dell" in url: #works
+        name_element = soup.find("span", class_="page-title font-weight-md")
+        price_element = soup.find("span", attrs={"data-bind": "html: salePrice"}) or soup.find("span", attrs={"data-bind": "html: marketPrice"})
+        image_element = soup.find("img", attrs={"data-testid": "sharedPolarisHeroPdImage"})
+    
   
-
-
     else:
         raise Exception("Website not supported for scraping.")
-    #print(response.text[:2500])  # Debugging line to check HTML content       
+    print(response.text[:2500])  # Debugging line to check HTML content       
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
     image_url = image_element.get('data-src') or image_element.get('src')  if image_element else None
     return name, current_price, image_url
+
 
 
 if __name__ == "__main__":
@@ -199,4 +196,19 @@ if __name__ == "__main__":
         name_element = soup.find("h1",class_="product_summary")
         price_element = soup.find("span", class_="price-title")
         image_element = soup.find("img", tabindex="0")
+
+
+
+        'Accept-Encoding': 'gzip, deflate, br',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Cache-Control': 'max-age=0',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
  '''

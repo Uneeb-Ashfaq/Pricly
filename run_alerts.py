@@ -1,14 +1,15 @@
 from twilio.rest import Client
 import alerts.keys as keys
 from app import app, db, Product, scrape
+import re
 
 def check_prices():
     with app.app_context():
         try:
             for product in Product.query.all():
                 name, price, image_url = scrape(product.url)
-                price = float(price.replace('$', '').replace('Now ', '').replace(',', '').replace('US','').replace("CAD","").replace('CA', '').replace('Sale price', '').strip()) 
-                product.current_price = price  # ✅ ADD THIS LINE!
+                price = float(re.search(r"\d+(?:\.\d+)?", price.replace(",", "")).group())
+                product.current_price = price  
 
             db.session.commit()
         except Exception as e:

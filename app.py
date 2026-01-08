@@ -84,6 +84,11 @@ def scrape(url): #scraping function
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
 
+        #these are mainly for walmart atm
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+
       
     }
 
@@ -106,11 +111,11 @@ def scrape(url): #scraping function
         image_element = soup.find("img")
     elif "nike.com" in url or "nike.ca" in url: # WORKS!
         name_element = soup.find("h1", id="pdp_product_title")  
-        price_element = soup.find("span",attrs={"data-testid": "currentPrice-container"})
+        price_element = soup.find("span",attrs={"data-testid": "currentPrice-container"}) 
         image_element = soup.find("img")
     elif "jcpenney.com" in url or "jcpenney.ca" in url: #price not working yet
         name_element = soup.find("h1",id="productTitle-false")
-        price_element = soup.find(attrs={"data-automation-id": "at-price-value"})
+        price_element = soup.find("span", attrs={"data-automation-id": "at-price-value"})
         image_element = soup.find("img")
     elif "apple.com" in url or "apple.ca" in url: # error (Picture doesnt work)!
         name_element = soup.find("h1")
@@ -136,15 +141,24 @@ def scrape(url): #scraping function
         name_element = soup.find("span", class_="page-title font-weight-md")
         price_element = soup.find("span", attrs={"data-bind": "html: salePrice"}) or soup.find("span", attrs={"data-bind": "html: marketPrice"})
         image_element = soup.find("img", attrs={"data-testid": "sharedPolarisHeroPdImage"})
+    elif "goodminds" in url: #works except img
+        name_element = soup.find("h1")
+        price_element = soup.find("Span", class_="price") or soup.find("div", class_="price-list")
+        image_element = soup.find("img")
+    elif "bananarepublic" in url: #fix but work 
+        name_element = soup.find("h1")
+        price_element = soup.find("Span")
+        image_element = soup.find("div", class_="product-gallery__carousel-item is-selected ")
     
-  
+ 
+
     else:
         raise Exception("Website not supported for scraping.")
     print(response.text[:2500])  # Debugging line to check HTML content       
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
-    image_url = image_element.get('data-src') or image_element.get('src')  if image_element else None
+    image_url =  image_element.get('data-src') or image_element.get('src')  if image_element else None
     return name, current_price, image_url
 
 

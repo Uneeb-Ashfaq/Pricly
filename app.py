@@ -144,14 +144,14 @@ def scrape(url): #scraping function
         name_element = soup.find("span", class_="page-title font-weight-md")
         price_element = soup.find("span", attrs={"data-bind": "html: salePrice"}) or soup.find("span", attrs={"data-bind": "html: marketPrice"})
         image_element = soup.find("img", attrs={"data-testid": "sharedPolarisHeroPdImage"})
-    elif "goodminds" in url: #works except img
+    elif "goodminds" in url: #works
         name_element = soup.find("h1")
         price_element = soup.find("Span", class_="price") or soup.find("div", class_="price-list")
-        image_element = soup.find("img")
-    elif "bananarepublic" in url: #fix but work 
+        image_element = soup.find("img", class_="product-gallery__image")
+    elif "bananarepublic" in url: #price works image doesnt 
         name_element = soup.find("h1")
-        price_element = soup.find("Span")
-        image_element = soup.find("div", class_="aspect-ratio")
+        price_element = soup.find("span", class_="current-sale-price")
+        image_element = soup.find("img", {"fetchpriority": "high"})
  
 
     else:
@@ -160,7 +160,9 @@ def scrape(url): #scraping function
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
-    image_url =  image_element.get('data-src') or image_element.get('src')  if image_element else None
+    image_url =  image_element.get('data-srcset') or image_element.get('data-src')  or image_element.get('src')    if image_element else None
+    if '{width}' in image_url:
+        image_url = image_url.replace('{width}', '500') # this is for goodminds
     return name, current_price, image_url
 
 

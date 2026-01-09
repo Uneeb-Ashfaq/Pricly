@@ -19,7 +19,7 @@ client = Client(keys.ACCOUNT_SID, keys.AUTH_TOKEN)
 def send_price_alerts():
     with app.app_context():
         for product in Product.query.all():
-            if product.current_price <= product.target_price and not product.message_sent:
+            if product.current_price <= product.target_price and not product.message_sent and product.current_price != 0:
                 try:
         
                     message = client.messages.create(

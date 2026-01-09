@@ -88,6 +88,9 @@ def scrape(url): #scraping function
         'Sec-Fetch-Dest': 'document',
         'Sec-Fetch-Mode': 'navigate',
         'Sec-Fetch-Site': 'none',
+        'Cache-Control': 'max-age=0',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+
 
       
     }
@@ -148,8 +151,7 @@ def scrape(url): #scraping function
     elif "bananarepublic" in url: #fix but work 
         name_element = soup.find("h1")
         price_element = soup.find("Span")
-        image_element = soup.find("div", class_="product-gallery__carousel-item is-selected ")
-    
+        image_element = soup.find("div", class_="aspect-ratio")
  
 
     else:
@@ -210,8 +212,6 @@ if __name__ == "__main__":
         name_element = soup.find("h1",class_="product_summary")
         price_element = soup.find("span", class_="price-title")
         image_element = soup.find("img", tabindex="0")
-
-
 
         'Accept-Encoding': 'gzip, deflate, br',
         'DNT': '1',

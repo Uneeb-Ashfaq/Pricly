@@ -153,11 +153,14 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("span", class_="current-sale-price")
         image_element = soup.find("img", {"fetchpriority": "high"})
-    elif "steampowered.com" in url:
+    elif "steampowered.com" in url: #Works
         name_element = soup.find("div", id="appHubAppName")
         price_element = soup.find("div", class_="game_purchase_price")
         image_element = soup.find("img", class_="game_header_image_full")
-
+    elif "crunchyroll.com" in url: #Works
+        name_element = soup.find("h2")
+        price_element = soup.find("b")
+        image_element = soup.find("img")
     else:
         raise Exception("Website not supported for scraping.")
 

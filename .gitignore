@@ -1,1 +1,14 @@
+__pycache__/
+*.pyc
+
+# Virtual Environment
+env/
+
+# Flask
+instance/
+*.db
+
+alerts/keys.py
+
+# OS
 .DS_Store

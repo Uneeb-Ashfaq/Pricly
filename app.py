@@ -117,8 +117,9 @@ def scrape(url): #scraping function
         price_element = soup.find("span",attrs={"data-testid": "currentPrice-container"}) 
         image_element = soup.find("img")
     elif "jcpenney.com" in url or "jcpenney.ca" in url: #price not working yet
-        name_element = soup.find("h1",id="productTitle-false")
+        name_element = soup.find("h1",id="productTitle-false") 
         price_element = soup.find("span", attrs={"data-automation-id": "at-price-value"})
+        print(price_element)
         image_element = soup.find("img")
     elif "apple.com" in url or "apple.ca" in url: # error (Picture doesnt work)!
         name_element = soup.find("h1")
@@ -152,10 +153,13 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("span", class_="current-sale-price")
         image_element = soup.find("img", {"fetchpriority": "high"})
+    elif "steampowered.com" in url:
+        name_element = soup.find("div", id="appHubAppName")
+        price_element = soup.find("div", class_="game_purchase_price")
+        image_element = soup.find("img", class_="game_header_image_full")
 
     else:
         raise Exception("Website not supported for scraping.")
-    print(response.text[:2500])  # Debugging line to check HTML content       
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
@@ -166,7 +170,9 @@ def scrape(url): #scraping function
         image_url = 'https://bananarepublic.gap.com' + image_url # special case
  
 
-    print('THIS IS THE IMAGE URL: ', image_url)
+    #print('THIS IS THE IMAGE URL: ', image_url)
+    #print(response.text[:2500])  # Debugging line to check HTML content       
+
     return name, current_price, image_url
 
 

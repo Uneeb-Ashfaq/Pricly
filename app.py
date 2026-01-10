@@ -160,7 +160,19 @@ def scrape(url): #scraping function
     elif "crunchyroll.com" in url: #Works
         name_element = soup.find("h2")
         price_element = soup.find("b")
+        image_element = soup.find("img", )
+    elif "oldnavy" in url: #Works
+        name_element = soup.find("h1", class_="pdp-product-title")
+        price_element = soup.find("span", class_="current-sale-price")
         image_element = soup.find("img")
+
+        '''
+     Template for other websites: 
+        elif " " in url: #Works
+            name_element = soup.find("h1")
+            price_element = soup.find("span")
+            image_element = soup.find("img")
+        '''
     else:
         raise Exception("Website not supported for scraping.")
 

@@ -148,11 +148,10 @@ def scrape(url): #scraping function
         name_element = soup.find("h1")
         price_element = soup.find("Span", class_="price") or soup.find("div", class_="price-list")
         image_element = soup.find("img", class_="product-gallery__image")
-    elif "bananarepublic" in url: #price works image doesnt 
+    elif "bananarepublic" in url: #WORKS 
         name_element = soup.find("h1")
         price_element = soup.find("span", class_="current-sale-price")
         image_element = soup.find("img", {"fetchpriority": "high"})
- 
 
     else:
         raise Exception("Website not supported for scraping.")
@@ -163,6 +162,11 @@ def scrape(url): #scraping function
     image_url =  image_element.get('data-srcset') or image_element.get('data-src')  or image_element.get('src')    if image_element else None
     if '{width}' in image_url:
         image_url = image_url.replace('{width}', '500') # this is for goodminds
+    if image_url.startswith('/') and ('bananarepublic' in url):
+        image_url = 'https://bananarepublic.gap.com' + image_url # special case
+ 
+
+    print('THIS IS THE IMAGE URL: ', image_url)
     return name, current_price, image_url
 
 

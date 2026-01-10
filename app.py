@@ -166,13 +166,7 @@ def scrape(url): #scraping function
         price_element = soup.find("span", class_="current-sale-price")
         image_element = soup.find("img")
 
-        '''
-     Template for other websites: 
-        elif " " in url: #Works
-            name_element = soup.find("h1")
-            price_element = soup.find("span")
-            image_element = soup.find("img")
-        '''
+
     else:
         raise Exception("Website not supported for scraping.")
 

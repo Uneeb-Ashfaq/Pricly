@@ -86,26 +86,52 @@ header h1 {
 
 
 
-/* 
-.website-list {
+.supported-websites-section {
     margin-top: 20px;
     padding: 40px 50px;        
     background-color: rgb(255, 255, 255);
-    display: flex;                
-    align-items: center;     
-.website-logos-container {
-       display: flex;                
+
 
 
 }
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
 }
-.website-list .website-logos-container img {
-    width: 100px;           
+
+
+.logo-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* ADD THIS */
+    max-width: 1200px;
+    margin: 0 auto; /* ADD THIS to center it */
+
+
+}
+.logo-item {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+}
+
+.logo-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.logo-item img {
     max-width: 100%;
-    height: auto;
-    display: block;
+    height: 60px;
+    object-fit: contain;
+
 }
-*/
 
 
 

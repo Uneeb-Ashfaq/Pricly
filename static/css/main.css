@@ -35,7 +35,7 @@ header {
     top : 0; left: 0; right: 0;
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 20px 60px; 
     background-color: rgb(255, 255, 255);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -47,13 +47,15 @@ header h1 {
 
 .hero-section {
     margin-top: -20px;
-    padding: 40px 50px;        
+    padding: 80px 60px;
     background: linear-gradient(90deg, #ffffff, #ffffff);
     border-radius: 8px;
     display: flex;                
     align-items: center;          
     justify-content: space-between;
-    gap: 60px;                  
+    gap: 60px;         
+         
+
 }
 
 
@@ -87,9 +89,10 @@ header h1 {
 
 
 .supported-websites-section {
-    margin-top: 20px;
-    padding: 40px 50px;        
+    padding: 80px 60px; /* Increased padding */
     background-color: rgb(255, 255, 255);
+    margin: 60px 0; /* Added vertical spacing */
+
 
 
 
@@ -106,7 +109,8 @@ header h1 {
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* ADD THIS */
     max-width: 1200px;
-    margin: 0 auto; /* ADD THIS to center it */
+    margin: 0 auto; 
+
 
 
 }
@@ -258,3 +262,31 @@ button:hover {
 
 
 
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    header {
+        padding: 15px 20px;
+    }
+    
+    .hero-section {
+        flex-direction: column;
+        padding: 60px 20px;
+        text-align: center;
+    }
+    
+    .hero-section h2 {
+        font-size: 2rem;
+    }
+    
+ 
+    
+    .logo-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 20px;
+    }
+    
+    .tracked-products-section .box-container {
+        grid-template-columns: 1fr;
+    }
+}

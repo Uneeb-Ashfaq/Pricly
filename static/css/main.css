@@ -286,9 +286,9 @@ button:hover {
         gap: 20px;
     }
     
-    .tracked-products-section .box-container {
-        grid-template-columns: 1fr;
-    }
+
+
+    
 }
 
 /* Tablet */

@@ -153,7 +153,6 @@ def scrape_selenium(url):
             price = driver.find_element(By.CSS_SELECTOR, '[data-testid="token-page-fungible-price"]').text
             image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
         
-        # Add more Selenium-based scrapers here
         
         else:
             driver.quit()

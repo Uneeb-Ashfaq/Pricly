@@ -1,6 +1,7 @@
 from twilio.rest import Client
 import alerts.keys as keys
-from app import app, db, Product, scrape
+from app import app, db, Product
+from scraper import scrape
 import re
 
 def check_prices():

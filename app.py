@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import re
-from scraper import scrape  # ADD THIS LINE
+from scraper import scrape  
 
 
 

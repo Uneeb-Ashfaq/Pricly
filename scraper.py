@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 def scrape(url):
-    selenium_sites = ['phantom', 'etsy', 'target']
+    selenium_sites = ['phantom', 'etsy', 'target',"sephora"]
     if any(site in url for site in selenium_sites):
         return scrape_selenium(url)
     else:
@@ -57,11 +57,6 @@ def scrape_beautifulsoup(url): #scraping function
     elif "nike.com" in url or "nike.ca" in url: # WORKS!
         name_element = soup.find("h1", id="pdp_product_title")  
         price_element = soup.find("span",attrs={"data-testid": "currentPrice-container"}) 
-        image_element = soup.find("img")
-    elif "jcpenney.com" in url or "jcpenney.ca" in url: #price not working yet
-        name_element = soup.find("h1",id="productTitle-false") 
-        price_element = soup.find("span", attrs={"data-automation-id": "at-price-value"})
-        print(price_element)
         image_element = soup.find("img")
     elif "apple.com" in url or "apple.ca" in url: # error (Picture doesnt work)!
         name_element = soup.find("h1")
@@ -130,7 +125,7 @@ def scrape_beautifulsoup(url): #scraping function
 #Scrapes JavaScript-heavy sites with Selenium
 def scrape_selenium(url):
     options = Options()
-    options.add_argument('--headless')
+    #options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     
     driver = webdriver.Chrome(options=options)
@@ -146,8 +141,11 @@ def scrape_selenium(url):
             name = driver.find_element(By.CSS_SELECTOR, '[data-test="product-title"]').text
             price = driver.find_element(By.CSS_SELECTOR, '[data-test="product-price"]').text
             image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
+        elif "sephora" in url:
+            name = driver.find_element(By.CSS_SELECTOR, "h1").text
+            price = driver.find_element(By.CSS_SELECTOR, '.css-18jtttk').text
+            image = driver.find_element(By.CSS_SELECTOR, "picture").get_attribute("src")
         else:
-
             driver.quit()
             return None, None, None
         

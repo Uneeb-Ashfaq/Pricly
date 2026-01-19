@@ -11,17 +11,11 @@ from selenium.webdriver.chrome.options import Options
 
 
 def scrape(url):
-    selenium_sites = ['phantom']
+    selenium_sites = ['phantom', 'amazon', 'target']
     if any(site in url for site in selenium_sites):
         return scrape_selenium(url)
     else:
         return scrape_beautifulsoup(url)
-
-
-
-
-
-
 
 
 def scrape_beautifulsoup(url): #scraping function
@@ -115,14 +109,13 @@ def scrape_beautifulsoup(url): #scraping function
         image_element = soup.find("img")
 
     
-
-
     else:
         raise Exception("Website not supported for scraping.")
 
     name = name_element.get_text().strip() if name_element else "Unknown Product"
     current_price = price_element.get_text().strip() if price_element else "0.00"
     image_url =  image_element.get('data-srcset') or image_element.get('data-src')  or image_element.get('src')    if image_element else None
+    
     if '{width}' in image_url:
         image_url = image_url.replace('{width}', '500') # this is for goodminds
     if image_url.startswith('/') and ('bananarepublic' in url):
@@ -144,16 +137,19 @@ def scrape_selenium(url):
     
     try:
         driver.get(url)
-        
+        time.sleep(5)  
         if "phantom" in url:
-            name = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="token-page-fungible-name"]'))
-            ).text
-            
+            name = driver.find_element(By.CSS_SELECTOR, '[data-testid="token-page-fungible-name"]').text
             price = driver.find_element(By.CSS_SELECTOR, '[data-testid="token-page-fungible-price"]').text
             image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
-        
-        
+        elif "amazon" in url:
+            name = driver.find_element(By.ID, 'productTitle').text
+            price = driver.find_element(By.CSS_SELECTOR, '.a-price-whole').text
+            image = driver.find_element(By.ID, 'landingImage').get_attribute('src')     
+        elif "target" in url:
+            name = driver.find_element(By.CSS_SELECTOR, '[data-test="product-title"]').text
+            price = driver.find_element(By.CSS_SELECTOR, '[data-test="product-price"]').text
+            image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
         else:
             driver.quit()
             return None, None, None

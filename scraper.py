@@ -144,7 +144,7 @@ def scrape_selenium(url):
         elif "sephora" in url:
             name = driver.find_element(By.CSS_SELECTOR, "h1").text
             price = driver.find_element(By.CSS_SELECTOR, '.css-18jtttk').text
-            image = driver.find_element(By.CSS_SELECTOR, "picture").get_attribute("src")
+            image = driver.find_element(By.CSS_SELECTOR, "picture").get_attribute("src") #image not working
         else:
             driver.quit()
             return None, None, None

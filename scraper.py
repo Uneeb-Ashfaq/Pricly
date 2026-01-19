@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 def scrape(url):
-    selenium_sites = ['phantom', 'amazon', 'target']
+    selenium_sites = ['phantom', 'etsy', 'target']
     if any(site in url for site in selenium_sites):
         return scrape_selenium(url)
     else:
@@ -141,16 +141,13 @@ def scrape_selenium(url):
         if "phantom" in url:
             name = driver.find_element(By.CSS_SELECTOR, '[data-testid="token-page-fungible-name"]').text
             price = driver.find_element(By.CSS_SELECTOR, '[data-testid="token-page-fungible-price"]').text
-            image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
-        elif "amazon" in url:
-            name = driver.find_element(By.ID, 'productTitle').text
-            price = driver.find_element(By.CSS_SELECTOR, '.a-price-whole').text
-            image = driver.find_element(By.ID, 'landingImage').get_attribute('src')     
+            image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')        
         elif "target" in url:
             name = driver.find_element(By.CSS_SELECTOR, '[data-test="product-title"]').text
             price = driver.find_element(By.CSS_SELECTOR, '[data-test="product-price"]').text
             image = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
         else:
+
             driver.quit()
             return None, None, None
         

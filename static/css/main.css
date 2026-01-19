@@ -149,12 +149,19 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+}
+
+.track-form {
+  width: 100%;
+  max-width: 750px;   /* keeps your nice desktop width */
 }
 input{
     padding: 10px;
     border: 1px solid #cccccc;
     border-radius: 4px;
-    width: 750px;
+    width: 100%;
+    max-width: 750px;
 }
 button {
     padding: 5px;
@@ -291,10 +298,3 @@ button:hover {
     
 }
 
-/* Tablet */
-@media (max-width: 1024px) and (min-width: 769px) {
-    .body-section {
-        max-width: 700px;
-        padding: 40px 30px;
-    }
-}

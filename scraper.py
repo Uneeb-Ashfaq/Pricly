@@ -102,7 +102,12 @@ def scrape_beautifulsoup(url): #scraping function
         name_element = soup.find("h1", class_="pdp-product-title")
         price_element = soup.find("span", class_="current-sale-price")
         image_element = soup.find("img")
+    elif "prada" in url:
+        name_element = soup.find("h1", class_="text-title-big", attrs={"data-element": "product-title"})
+        price_element = soup.find("p", attrs={"data-element": "product-current-price"})
+        image_element = soup.find("img")
 
+        
     
     else:
         raise Exception("Website not supported for scraping.")
